@@ -1,0 +1,80 @@
+{
+  "ERROR": {
+    "SERVER": "Error, try again!"
+  },
+  "USER_CONTROLLER": {
+    "REGISTRATION": {
+      "EMPTY": "Complete the form!",
+      "USERNAME": "Username must contain only English letters and numbers",
+      "EMAIL": "Invalid email",
+      "PASSWORD": {
+        "NOT_MATCH": "Passwords do not match!",
+        "LONG": "Password must be longer than 4 characters!",
+        "SHORT": "The password must be shorter than 32 characters!"
+      }
+    },
+    "LOGIN": {
+      "EMPTY": "Complete the form!",
+      "EMAIL": "Invalid email"
+    },
+    "SEND_CODE": {
+      "NOT_USER": "Can't find your email, contact admin"
+    }
+  },
+  "ADMIN_CONTROLLER": {
+    "CREATE_USER": {
+      "EMPTY": "Complete the form!",
+      "USERNAME": "Username must contain only English letters and numbers",
+      "EMAIL": "Invalid email",
+      "PASSWORD": {
+        "LONG": "Password must be longer than 4 characters!",
+        "SHORT": "The password must be shorter than 32 characters!"
+      }
+    }
+  },
+  "MAIL_SERVICE": {
+    "SUBJECT": "Account activation on the site {link}",
+    "TEXT": "Hello, you have registered on the site {link}. To activate your account and start working in the system, click the button",
+    "BUTTON": "Activate"
+  },
+  "USER_SERVICE": {
+    "REGISTRATION": {
+      "USERNAME": "User with this username is registered",
+      "EMAIL": "User with this email is registered"
+    },
+    "CREATE_USER": {
+      "USERNAME": "User with this username is registered",
+      "EMAIL": "User with this email is registered"
+    },
+    "ACTIVATE": {
+      "LINK": "Incorrect activation link"
+    },
+    "LOGIN": {
+      "NOT_USER": "User with this email was not found",
+      "NOT_MATCH_PASSWORD": "Incorrect password"
+    },
+    "UPDATE_USER": {
+      "NOT_PASSWORD": "Enter your password to make changes",
+      "NOT_MATCH_PASSWORD": "Incorrect password"
+    },
+    "GET_USER": {
+      "NOT_FOUND": "User is not found"
+    },
+    "EDIT_USER": {
+      "NOT_FOUND": "User is not found"
+    },
+    "DELETE_USER": {
+      "NOT_FOUND": "User is not found"
+    }
+  },
+  "ROLE_SERVICE": {
+    "HAS_ALREADY": "This name is already taken",
+    "NOT_FOUND": "Role not found",
+    "NOT_PERMISSIONS": "Role must have at least 1 permission"
+  },
+  "TEAM_SERVICE": {
+    "HAS_ALREADY": "This name is already taken",
+    "NOT_FOUND": "Team not found",
+    "BEARER_INVALID": "bearer invalid"
+  }
+}
