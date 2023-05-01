@@ -2,8 +2,6 @@
 import TeamModel from '../models/team-model.js';
 import ApiError from '../exceptions/api-error.js';
 import userService from '../service/user-service.js';
-import crmService from '../service/crm-service.js';
-import { encrypt } from '../helpers/encryption.js';
 
 class TeamService {
   async createTeam(data, i18n) {
@@ -12,11 +10,6 @@ class TeamService {
     if (isTeam) {
       throw ApiError.BadRequerest(i18n.t('TEAM_SERVICE.HAS_ALREADY'));
     }
-    const answer = await crmService.getAllOffers(data.bearer);
-    if (answer === null) {
-      throw ApiError.BadRequerest(i18n.t('TEAM_SERVICE.BEARER_INVALID'));
-    }
-    data.bearer = encrypt(data.bearer);
     const team = await TeamModel.create(data);
     return team;
   }
@@ -31,14 +24,7 @@ class TeamService {
     if (isTeam && isTeam._id.toString() !== team._id.toString()) {
       throw ApiError.BadRequerest(i18n.t('TEAM_SERVICE.HAS_ALREADY'));
     }
-    if (data.bearer) {
-      const answer = await crmService.getAllOffers(data.bearer);
-      if (answer === null) {
-        throw ApiError.BadRequerest(i18n.t('TEAM_SERVICE.BEARER_INVALID'));
-      } else {
-        team.bearer = encrypt(data.bearer);
-      }
-    }
+    team.tests = data.tests;
     team.name = data.name;
     team.linkTg = data.linkTg;
     await team.save();

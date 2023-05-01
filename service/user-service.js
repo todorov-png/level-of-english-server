@@ -111,7 +111,7 @@ class UserService {
   }
 
   async getUserTeamInfo(id) {
-    const user = await UserModel.findOne({ _id: id }, { team: true }).populate('team');
+    const user = await UserModel.findOne({ _id: id }, { team: true }).populate('team', 'tests');
     if (!user) {
       throw ApiError.BadRequerest(i18n.t('USER_SERVICE.GET_USER.NOT_FOUND'));
     }

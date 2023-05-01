@@ -2,6 +2,7 @@
 import roleService from '../service/role-service.js';
 import userService from '../service/user-service.js';
 import teamService from '../service/team-service.js';
+import testService from '../service/test-service.js';
 import ApiError from '../exceptions/api-error.js';
 
 class AdminController {
@@ -104,6 +105,15 @@ class AdminController {
     try {
       const teams = await teamService.getTeamsList();
       return res.json(teams);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async fetchTestsList(req, res, next) {
+    try {
+      const tests = await testService.getList();
+      return res.json(tests);
     } catch (e) {
       next(e);
     }

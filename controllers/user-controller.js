@@ -1,11 +1,9 @@
 /* eslint-disable */
 import mailService from '../service/mail-service.js';
 import tokenService from '../service/token-service.js';
-import landService from '../service/land-service.js';
+import testService from '../service/test-service.js';
 import userService from '../service/user-service.js';
-import crmService from '../service/crm-service.js';
 import ApiError from '../exceptions/api-error.js';
-import { decrypt } from '../helpers/encryption.js';
 
 class UserController {
   async registration(req, res, next) {
@@ -142,10 +140,9 @@ class UserController {
     }
   }
 
-  async getLands(req, res, next) {
+  async getTests(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-      //TODO добавить переводы и переименовать сервисы в функции в ленды
       const tokenData = tokenService.validateRefreshToken(refreshToken);
       if (!tokenData) {
         throw ApiError.BadRequerest(req.t('USER_CONTROLLER.GET_PRODUCTS.NOT_USER'));
@@ -155,28 +152,13 @@ class UserController {
       if (!userData.team) {
         throw ApiError.BadRequerest(req.t('USER_CONTROLLER.GET_PRODUCTS.NOT_TEAM'));
       }
-
-      const bearer = decrypt(userData.team.bearer);
-      const offers = await crmService.getAllOffers(bearer);
-      if (offers === null) {
-        throw ApiError.BadRequerest(req.t('USER_CONTROLLER.GET_PRODUCTS.BEARER_INVALID'));
-      }
-      //TODO тут нужно еще отфильтровать по разрешению на просмотр от админа
-      const productsName = offers.data.map((offer) => offer.offer_title);
-      const dataLands = await landService.getTeamsProductsLends(productsName);
-      const lands = {};
-      dataLands.forEach((land) => {
-        if (!land.privacy || land.teamName.toLocaleLowerCase === userData.team.name) {
-          const nameKey = land.product.replace(/\W/, '_');
-          Array.isArray(lands[nameKey]) ? null : (lands[nameKey] = []);
-          lands[nameKey].push({
-            country: land.country,
-            product: land.product,
-            _id: land._id,
-          });
-        }
+      const tests = [];
+      const testList = await testService.getList();
+      userData.team.tests.forEach((test) => {
+        tests.push(testList.find((el) => el._id.toString() === test.toString()));
       });
-      return res.json(lands);
+
+      return res.json(tests);
     } catch (e) {
       next(e);
     }

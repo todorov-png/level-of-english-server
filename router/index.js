@@ -13,7 +13,14 @@ router.get('/activate/:link', UserController.activate);
 router.get('/refresh', UserController.refresh);
 router.post('/activation-code', authMiddleware, UserController.sendNewActivationCode);
 router.put('/user-update', authMiddleware, UserController.updateUser);
-router.get('/lands', authMiddleware, UserController.getLands);
+router.get('/tests', authMiddleware, UserController.getTests);
+
+router.get(
+  '/tests-list',
+  authMiddleware,
+  permissionMiddleware.bind(['assignTest']),
+  AdminController.fetchTestsList
+);
 
 router.get(
   '/roles',
