@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const RoleSchema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, unique: true, required: true },
   permissions: {
     createTeam: { type: Boolean },
     assignTeam: { type: Boolean },

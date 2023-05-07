@@ -1,59 +1,38 @@
-/* eslint-disable */
 import RoleModel from '../models/role-model.js';
-import ApiError from '../exceptions/api-error.js';
-import userService from '../service/user-service.js';
 
 class RoleService {
-  async createRole(data, i18n) {
-    if (!Object.keys(data.permissions).length) {
-      throw ApiError.BadRequerest(i18n.t('ROLE_SERVICE.NOT_PERMISSIONS'));
-    }
-    data.name = data.name.toLowerCase();
-    const isRole = await RoleModel.findOne({ name: data.name });
-    if (isRole) {
-      throw ApiError.BadRequerest(i18n.t('ROLE_SERVICE.HAS_ALREADY'));
-    }
-    const role = await RoleModel.create(data);
-    return role;
+  async findById(id) {
+    return await RoleModel.findById(id);
   }
 
-  async updateRole(data, i18n) {
-    if (!Object.keys(data.permissions).length) {
-      throw ApiError.BadRequerest(i18n.t('ROLE_SERVICE.NOT_PERMISSIONS'));
-    }
-    const role = await RoleModel.findById(data._id);
-    if (!role) {
-      throw ApiError.BadRequerest(i18n.t('ROLE_SERVICE.NOT_FOUND'));
-    }
-    role.name = data.name.toLowerCase();
-    role.permissions = data.permissions;
-    await role.save();
-    return null;
+  async findByName(name) {
+    return await RoleModel.findOne({
+      name: new RegExp('^' + name + '$', 'i'),
+    });
   }
 
-  async deleteRole(_id, i18n) {
-    const isRole = await RoleModel.findById(_id);
-    if (!isRole) {
-      throw ApiError.BadRequerest(i18n.t('ROLE_SERVICE.NOT_FOUND'));
-    }
-    await userService.clearUserRole(_id);
-    await RoleModel.deleteOne({ _id });
-    return null;
+  async create(data) {
+    return await RoleModel.create(data);
   }
 
-  async getAllRoles() {
-    const roles = await RoleModel.find();
-    return roles;
+  async update(id, data) {
+    await RoleModel.updateOne({ _id: id }, data);
   }
 
-  async getRolesList() {
-    const roles = await RoleModel.find({}, { _id: true, name: true });
-    return roles;
+  async delete(id) {
+    await RoleModel.deleteOne({ _id: id });
   }
 
-  async getRoleName(id) {
-    const role = await RoleModel.findOne({ _id: id }, { _id: true, name: true });
-    return role;
+  async getList() {
+    return await RoleModel.find({}, { _id: true, name: true });
+  }
+
+  async getAll() {
+    return await RoleModel.find();
+  }
+
+  async getName(id) {
+    return await RoleModel.findOne({ _id: id }, { _id: true, name: true });
   }
 }
 

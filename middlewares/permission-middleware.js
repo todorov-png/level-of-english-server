@@ -4,7 +4,7 @@ import UserModel from '../models/user-model.js';
 
 export default async function (req, res, next) {
   const { refreshToken } = req.cookies;
-  const userData = tokenService.validateRefreshToken(refreshToken);
+  const userData = tokenService.validateRefresh(refreshToken);
   const user = await UserModel.findById(userData.id, {
     role: true,
   }).populate('role', 'permissions');
