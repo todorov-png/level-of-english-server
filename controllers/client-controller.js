@@ -1,13 +1,11 @@
 import mailService from '../service/mail-service.js';
 import tokenService from '../service/token-service.js';
-// import landService from '../service/land-service.js';
+import historyService from '../service/history-service.js';
 import clientService from '../service/client-service.js';
-// import crmService from '../service/crm-service.js';
 import ApiError from '../exceptions/api-error.js';
 import UserDto from '../dtos/user-dto.js';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
-// import { decrypt } from '../helpers/encryption.js';
 
 class ClientController {
   async registration(req, res, next) {
@@ -255,45 +253,34 @@ class ClientController {
     }
   }
 
-  // async getLands(req, res, next) {
-  //   try {
-  //     const { refreshToken } = req.cookies;
-  //     //TODO добавить переводы и переименовать сервисы в функции в ленды
-  //     const tokenData = tokenService.validateRefresh(refreshToken);
-  //     if (!tokenData) {
-  //       throw ApiError.BadRequerest(req.t('CONTROLLER.CLIENT.GET_PRODUCTS.NOT_USER'));
-  //     }
+  async createHistory(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      const { correctAnswers, test } = req.body;
+      if (!refreshToken) {
+        throw ApiError.UnauthorizedError();
+      }
+      const userData = tokenService.validateRefresh(refreshToken);
+      await historyService.create({ user: userData.id, correctAnswers, test });
+      return res.end();
+    } catch (e) {
+      next(e);
+    }
+  }
 
-  //     const userData = await clientService.getUserTeamInfo(tokenData.id);
-  //     if (!userData.team) {
-  //       throw ApiError.BadRequerest(req.t('CONTROLLER.CLIENT.GET_PRODUCTS.NOT_TEAM'));
-  //     }
-
-  //     const bearer = decrypt(userData.team.bearer);
-  //     const offers = await crmService.getAllOffers(bearer);
-  //     if (offers === null) {
-  //       throw ApiError.BadRequerest(req.t('CONTROLLER.CLIENT.GET_PRODUCTS.BEARER_INVALID'));
-  //     }
-  //     //TODO тут нужно еще отфильтровать по разрешению на просмотр от админа
-  //     const productsName = offers.data.map((offer) => offer.offer_title);
-  //     const dataLands = await landService.getTeamsProductsLends(productsName);
-  //     const lands = {};
-  //     dataLands.forEach((land) => {
-  //       if (!land.privacy || land.teamName.toLocaleLowerCase === userData.team.name) {
-  //         const nameKey = land.product.replace(/\W/, '_');
-  //         Array.isArray(lands[nameKey]) ? null : (lands[nameKey] = []);
-  //         lands[nameKey].push({
-  //           country: land.country,
-  //           product: land.product,
-  //           _id: land._id,
-  //         });
-  //       }
-  //     });
-  //     return res.json(lands);
-  //   } catch (e) {
-  //     next(e);
-  //   }
-  // }
+  async getHistoryAll(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      if (!refreshToken) {
+        throw ApiError.UnauthorizedError();
+      }
+      const userData = tokenService.validateRefresh(refreshToken);
+      const data = await historyService.getUserAll(userData.id);
+      return res.json(data);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default new ClientController();

@@ -20,7 +20,7 @@ router.get(
 );
 
 router.get(
-  '/:name',
+  '/:id',
   authMiddleware,
   // permissionMiddleware.bind(['createRole', 'deleteRole']),
   TestController.get

@@ -24,7 +24,7 @@ class TeamService {
   }
 
   async getAll() {
-    return await TeamModel.find({}, { _id: true, name: true, members: true, linkTg: true });
+    return await TeamModel.find();
   }
 
   async getList() {

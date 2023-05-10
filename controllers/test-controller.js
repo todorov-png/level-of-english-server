@@ -37,7 +37,7 @@ class TestController {
 
   async get(req, res, next) {
     try {
-      const data = await testService.findByName(req.params.name);
+      const data = await testService.findById(req.params.id);
       return res.json(data);
     } catch (e) {
       next(e);
