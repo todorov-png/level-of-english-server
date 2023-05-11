@@ -139,7 +139,7 @@ class ClientController {
       if (!tokenData) {
         throw ApiError.BadRequerest(req.t('CONTROLLER.CLIENT.SEND_CODE.NOT_USER'));
       }
-      const UserData = await clientService.findById(tokenData.id);
+      const UserData = await clientService.findById(tokenData.user);
       if (!UserData) {
         throw ApiError.BadRequerest(req.t('CONTROLLER.CLIENT.SEND_CODE.NOT_USER'));
       }
