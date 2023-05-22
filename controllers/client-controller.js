@@ -110,7 +110,7 @@ class ClientController {
       const { refreshToken } = req.cookies;
       await tokenService.delete(refreshToken);
       res.clearCookie('refreshToken');
-      return res.redirect(process.env.CLIENT_URL);
+      return res.end();
     } catch (e) {
       next(e);
     }
